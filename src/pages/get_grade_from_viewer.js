@@ -2,14 +2,7 @@ if (window.ssurade === undefined) window.ssurade = {};
 if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
 
 {
-    let _open = window.open, res = null;
-    window.open = function () {
-        if (res !== null) {
-            res(...arguments);
-        }
-    };
-
-    window.ssurade.crawl.getPrintGradeURL = async () => {
+    window.ssurade.crawl.getGradeFromViewer = async () => {
         if (location.hostname !== "office.ssu.ac.kr") return null;
 
         {
@@ -19,7 +12,9 @@ if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
         }
 
         {
-            let exportOption = await ssurade.domUtils.waitForElement(() => document.querySelectorAll("select").length >= 3);
+            let exportOption = await ssurade.domUtils.waitForElement(() => document.querySelectorAll("select").length >= 3, {
+                failFunc: () => document.querySelector("input[tabindex='4']").click(),
+            });
             if (!exportOption) return null;
 
             document.querySelectorAll("select")[1].selectedIndex = 6;

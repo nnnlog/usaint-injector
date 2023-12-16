@@ -7,7 +7,7 @@ window.ssurade.crawl.getStudentInfo = async() => {
     await lightspeed.waitForPageLoad();
 
     let entranceYear = ssurade.lightspeed.getInput("입학 년도").getValue();
-    let graduateYear = ssurade.lightspeed.getInput("졸업연도").getValue();
+    let graduateYear = ssurade.lightspeed.getInput("졸업년도").getValue();
 
     return [entranceYear, graduateYear];
 };

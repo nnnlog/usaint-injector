@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from "@rollup/plugin-node-resolve";
 import json from '@rollup/plugin-json';
 import terser from '@rollup/plugin-terser';
+import tla from "rollup-plugin-tla";
 
 export default defineConfig({
     plugins: [
@@ -12,6 +13,7 @@ export default defineConfig({
         terser({
             ecma: 2020,
         }),
+        // tla.default(),
         {
             closeBundle() {
                 if (!process.env.ROLLUP_WATCH) {
@@ -23,9 +25,10 @@ export default defineConfig({
     ],
     input: './src/main.js',
     output: {
-        format: 'es',
+        format: 'iife',
         name: '[name].js',
         dir: './dist',
+        // sourcemap: true,
     },
     external: [],
 });

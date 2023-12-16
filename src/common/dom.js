@@ -2,8 +2,10 @@
     if (window.ssurade === undefined) window.ssurade = {};
 
     let opens = [];
-    window.open = function () {
-        for (let p of opens) p(...arguments);
+    window.open = function (url) {
+        for (let p of opens) {
+            p(url);
+        }
         opens = [];
     };
 
@@ -25,11 +27,15 @@
     };
 
     class DOMUtils {
-        waitForElement = async (func, interval = 10, maxTry = 500) => { // wait for 5 seconds default
+        waitForElement = async (func, opt = {interval: 10, maxTry: 500, failFunc: () => {}}) => { // wait for 5 seconds default
+            opt = Object.assign({interval: 10, maxTry: 500, failFunc: () => {}}, opt);
+            let {interval, maxTry, failFunc} = opt;
+
             for (let i = 0; i < maxTry; i++) {
                 if (func()) break;
                 if (i + 1 === maxTry) return false;
                 await new Promise(r => setTimeout(r, interval));
+                failFunc();
             }
             return true;
         }

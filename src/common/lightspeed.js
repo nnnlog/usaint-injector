@@ -1,8 +1,21 @@
-{
+(async () => {
+    if (window.ssurade === undefined) window.ssurade = {};
+
+    await new Promise(r => {
+        if (document.readyState === "complete") r();
+        else document.addEventListener("DOMContentLoaded", r);
+    });
+
+    if (window.UCF_LS === undefined) {
+        window.ssurade.init = true;
+        window.dispatchEvent(new Event("ssurade_lightspeed"));
+        return;
+    }
+
     {
         let id;
         await new Promise(r => id = setInterval(() => {
-            if (application && application.lightspeed) {
+            if (window.application !== null && window.application.lightspeed) {
                 r();
                 clearInterval(id);
             }
@@ -28,14 +41,15 @@
             locked = false;
         }, 0);
 
-        // reload all lightspeed object force.
-        Array(...document.querySelectorAll("*[id^='WD']")).forEach(e => application.lightspeed.oControlFactory.oGetControlById(e.id));
-
+        ssurade.lightspeed.update();
         return ret;
     };
 
 
     class LightspeedWrapper {
+        update = () => {
+            Array(...document.querySelectorAll("*[id^='WD']")).forEach(e => application.lightspeed.oControlFactory.oGetControlById(e.id));
+        }
 
         waitForUnlock = () => {
             let p, r;
@@ -61,12 +75,13 @@
         };
 
         findElement = func => {
+            ssurade.lightspeed.update();
             return Object.values(application.lightspeed.oControlFactory.mControls).find(func);
         };
 
         findElementById = id => application.lightspeed.oControlFactory.oGetControlById(id);
 
-        getInput = labelName => this.findElementById(this.findElement(a => a.oDomRef.tagName.toLowerCase() === "label" && a.sText === labelName)?.oDomRef?.htmlFor);;
+        getInput = labelName => this.findElementById(this.findElement(a => a.oDomRef.tagName.toLowerCase() === "label" && a.sText === labelName)?.oDomRef?.htmlFor);
 
         clickButton = async (buttonText) => {
             let element = this.findElement(s => s.sText === buttonText && s.sVisibility === "VISIBLE");
@@ -111,6 +126,8 @@
         closePopup = () => this.clickButton("닫기");
     }
 
-    if (window.ssurade === undefined) window.ssurade = {};
     window.ssurade.lightspeed = new LightspeedWrapper();
-}
+
+    window.ssurade.init = true;
+    window.dispatchEvent(new Event("ssurade_lightspeed"));
+})();

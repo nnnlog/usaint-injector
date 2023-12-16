@@ -1,4 +1,4 @@
 import "./get_grade";
-import "./get_grade_viewer";
+import "./get_grade_from_viewer";
 import "./get_student_info";
-import "./print_grade";
+import "./get_grade_viewer_url";

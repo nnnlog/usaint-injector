@@ -2,7 +2,7 @@ if (window.ssurade === undefined) window.ssurade = {};
 if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
 
 {
-    window.ssurade.crawl.getPrintGradeURL = async () => {
+    window.ssurade.crawl.getGradeViewerURL = async () => {
         let lightspeed = window.ssurade.lightspeed;
 
         await lightspeed.waitForPageLoad();
