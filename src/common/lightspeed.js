@@ -115,7 +115,7 @@
                 let infos = table.aGetCellInfosOfRow(i);
                 let curr = {};
                 for (let k in schema) {
-                    curr[k] = infos[schema[k]].oDomRefCell.innerText;
+                    curr[k] = infos[schema[k]].oDomRefCell.innerText.trim();
                 }
                 data.push(curr);
             }
