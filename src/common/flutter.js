@@ -1,6 +1,8 @@
-{
+(() => {
     if (window.ssurade === undefined) window.ssurade = {};
     if (window.ssurade.flutter === undefined) window.ssurade.flutter = {};
+    if (window.ssurade.flutter.init === true) return;
+    window.ssurade.flutter.init = true;
 
     // default handler
     window.ssurade.flutter.sendMessage = function () {
@@ -37,4 +39,4 @@
     };
 
     Promise.all(promises).then(init);
-}
+})();
