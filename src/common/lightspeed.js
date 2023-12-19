@@ -90,6 +90,12 @@
             return this.waitForUnlock();
         };
 
+        parseTableInPanel = (elementFindFunction, fieldSchema) => {
+            let tmp = this.findElement(elementFindFunction);
+            let dom = tmp.oDomRef?.querySelectorAll("table")[1];
+            return this.parseTable(s => s.sId === dom.id, fieldSchema);
+        }
+
         parseTable = (elementFindFunction, fieldSchema) => {
             let schema = {};
             /**
@@ -115,7 +121,11 @@
                 let infos = table.aGetCellInfosOfRow(i);
                 let curr = {};
                 for (let k in schema) {
-                    curr[k] = infos[schema[k]].oDomRefCell.innerText.trim();
+                    let dom = infos[schema[k]].oDomRefCell;
+                    curr[k] = dom.innerText.trim();
+                    if (curr[k] === "") {
+                        curr[k] = dom.querySelector("input")?.value ?? "";
+                    }
                 }
                 data.push(curr);
             }
