@@ -9,12 +9,23 @@
         console.log(...arguments);
     };
 
-    window.addEventListener("message", function (event) {
+    window.addEventListener("message", async function (event) {
         if (event.data === "ssurade") {
             let port = event.ports[0];
             port.onmessage = async (ev) => {
                 let p = await eval(ev.data);
                 port.postMessage(JSON.stringify({data: p}));
+            }
+        } else {
+            try {
+                let data = JSON.parse(event.data);
+                if (data.app === "ssurade") {
+                    let {id, code} = data;
+                    let p = await eval(code);
+                    ssurade.flutter.sendMessage(id, JSON.stringify({data: p}));
+                }
+            } catch (e) {
+
             }
         }
     });
