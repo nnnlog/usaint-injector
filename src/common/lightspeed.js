@@ -117,15 +117,15 @@
             }
 
             let data = [];
-            let {iVisibleRowCount} = table;
+            let {iVisibleRowCount, iVisibleFirstRow} = table;
             for (let i = 1; i <= table.iRowCount; i++) {
-                let j = (i - 1) % iVisibleRowCount + 1;
-                if (i > 1 && j === 1) {
+                if (iVisibleFirstRow > i || i > iVisibleFirstRow + iVisibleRowCount - 1) {
+                    iVisibleFirstRow = i;
                     table.fireVerticalScroll(table.sId, i, "NONE", "", "SCROLLBAR", false, false, false, false);
                     await ssurade.lightspeed.waitForUnlock();
                     table = this.findElement(elementFindFunction);
                 }
-                let infos = table.aGetCellInfosOfRow(j);
+                let infos = table.aGetCellInfosOfRow(i - iVisibleFirstRow + 1);
                 let curr = {};
                 for (let k in schema) {
                     let dom = infos[schema[k]].oDomRefCell;
