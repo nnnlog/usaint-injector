@@ -96,7 +96,7 @@
             return this.parseTable(s => s.sId === dom.id, fieldSchema);
         }
 
-        parseTable = (elementFindFunction, fieldSchema) => {
+        parseTable = async (elementFindFunction, fieldSchema) => {
             let schema = {};
             /**
              *
@@ -117,8 +117,15 @@
             }
 
             let data = [];
+            let {iVisibleRowCount} = table;
             for (let i = 1; i <= table.iRowCount; i++) {
-                let infos = table.aGetCellInfosOfRow(i);
+                let j = (i - 1) % iVisibleRowCount + 1;
+                if (i > 1 && j === 1) {
+                    table.fireVerticalScroll(table.sId, i, "NONE", "", "SCROLLBAR", false, false, false, false);
+                    await ssurade.lightspeed.waitForUnlock();
+                    table = this.findElement(elementFindFunction);
+                }
+                let infos = table.aGetCellInfosOfRow(j);
                 let curr = {};
                 for (let k in schema) {
                     let dom = infos[schema[k]].oDomRefCell;
