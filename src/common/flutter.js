@@ -38,7 +38,7 @@
 
     promises.push(new Promise(r => {
         if (ssurade?.init) r();
-        else window.addEventListener("ssurade_lightspeed", r)
+        else window.addEventListener("ssurade_lightspeed", r);
     }));
 
     const init = () => {

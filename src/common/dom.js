@@ -10,7 +10,7 @@
     };
 
     let downloads = [];
-    window.URL.createObjectURL = function(obj) {
+    window.URL.createObjectURL = function (obj) {
         if (obj instanceof Blob) {
             obj.arrayBuffer().then(a => {
                 let str = new TextDecoder("utf-16le", {
@@ -27,8 +27,14 @@
     };
 
     class DOMUtils {
-        waitForElement = async (func, opt = {interval: 10, maxTry: 500, failFunc: () => {}}) => { // wait for 5 seconds default
-            opt = Object.assign({interval: 10, maxTry: 500, failFunc: () => {}}, opt);
+        waitForElement = async (func, opt = {
+            interval: 10, maxTry: 500, failFunc: () => {
+            }
+        }) => { // wait for 5 seconds default
+            opt = Object.assign({
+                interval: 10, maxTry: 500, failFunc: () => {
+                }
+            }, opt);
             let {interval, maxTry, failFunc} = opt;
 
             for (let i = 0; i < maxTry; i++) {

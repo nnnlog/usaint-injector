@@ -1,7 +1,7 @@
 if (window.ssurade === undefined) window.ssurade = {};
 if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
 
-window.ssurade.crawl.getStudentInfo = async() => {
+window.ssurade.crawl.getStudentInfo = async () => {
     let lightspeed = window.ssurade.lightspeed;
 
     await lightspeed.waitForPageLoad();
