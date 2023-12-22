@@ -1,8 +1,10 @@
 (async () => {
     if (window.ssurade === undefined) window.ssurade = {};
+    if (ssurade.init !== undefined) return;
 
+    ssurade.init = false;
     await new Promise(r => {
-        if (document.readyState === "complete") r();
+        if (document.readyState !== "loading") r();
         else document.addEventListener("DOMContentLoaded", r);
     });
 
@@ -22,7 +24,7 @@
         }, 1));
     }
 
-    let locked = false;
+    let locked = application.lightspeed.bIsLocked;
     let _lock = application.lightspeed.lock;
     application.lightspeed.lock = function () {
         let ret = _lock.call(this, ...arguments);
@@ -70,7 +72,7 @@
                         clearInterval(id);
                         this.waitForUnlock().then(r);
                     }
-                })
+                }, 1);
             });
         };
 
