@@ -1,7 +1,17 @@
 if (window.ssurade === undefined) window.ssurade = {};
 if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
 
-window.ssurade.crawl.getSingleGrade = async (year, semesterKey, semesterValue) => {
+/**
+ * https://ecc.ssu.ac.kr/sap/bc/webdynpro/SAP/ZCMB3W0017?sap-language=ko
+ *
+ * 학기별 세부 성적을 반환합니다. (과목별 세부 성적은 반환되지 않습니다.)
+ *
+ * @param year
+ * @param semesterKey
+ * @param semesterValue
+ * @returns {Promise<{subjects: {subject_name, subject_code, credit, grade_score, grade_symbol, professor}[], rank: {year, semester, semester_rank, total_rank}}>}
+ */
+window.ssurade.crawl.getGradeBySemester = async (year, semesterKey, semesterValue) => {
     let lightspeed = window.ssurade.lightspeed;
 
     await lightspeed.waitForPageLoad();

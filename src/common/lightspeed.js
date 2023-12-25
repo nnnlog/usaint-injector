@@ -49,10 +49,18 @@
 
 
     class LightspeedWrapper {
+        /**
+         * @internal
+         */
         update = () => {
             Array(...document.querySelectorAll("*[id^='WD']")).forEach(e => application.lightspeed.oControlFactory.oGetControlById(e.id));
         }
 
+        /**
+         * Lightspeed의 unlock이 풀릴 때까지 기다립니다. 현재 lock되어 있지 않으면 기다리지 않습니다.
+         *
+         * @returns {Promise<void>}
+         */
         waitForUnlock = () => {
             let p, r;
             p = new Promise(a => r = a);
@@ -65,6 +73,11 @@
             return p;
         };
 
+        /**
+         * Lightspeed에 의해 페이지가 완전히 불러와질 때까지 기다립니다. 이미 페이지가 불러와져 있다면 기다리지 않습니다.
+         *
+         * @returns {Promise<void>}
+         */
         waitForPageLoad = async () => {
             return new Promise(r => {
                 let id = setInterval(() => {
@@ -76,15 +89,39 @@
             });
         };
 
+        /**
+         * Lightspeed에 의해 제어되는 요소를 주어진 함수에 맞는 것을 찾아 반환합니다.
+         *
+         * @param func
+         * @returns {UCF_Control}
+         */
         findElement = func => {
             ssurade.lightspeed.update();
             return Object.values(application.lightspeed.oControlFactory.mControls).find(func);
         };
 
+        /**
+         * Lightspeed에 의해 제어되는 요소를 주어진 id에 맞는 것을 찾아 반환합니다.
+         *
+         * @param id
+         * @returns {UCF_Control}
+         */
         findElementById = id => application.lightspeed.oControlFactory.oGetControlById(id);
 
+        /**
+         * Lightspeed에 의해 제어되는 Input을 주어진 라벨명에 맞는 것을 찾아 반환합니다.
+         *
+         * @param labelName
+         * @returns {UCF_Control}
+         */
         getInput = labelName => this.findElementById(this.findElement(a => a.oDomRef.tagName.toLowerCase() === "label" && a.sText === labelName)?.oDomRef?.htmlFor);
 
+        /**
+         * Lightspeed에 의해 제어되는 버튼을 주어진 버튼 텍스트 명에 맞는 것을 찾아 반환합니다.
+         *
+         * @param buttonText
+         * @returns {Promise<void>}
+         */
         clickButton = async (buttonText) => {
             let element = this.findElement(s => s.sText === buttonText && s.sVisibility === "VISIBLE");
             if (element === undefined) return;
@@ -92,12 +129,27 @@
             return this.waitForUnlock();
         };
 
+
+        /**
+         * Lightspeed에 의해 제어되는 Panel 요소 내의 표를 파싱하여 반환합니다.
+         *
+         * @param elementFindFunction
+         * @param fieldSchema
+         * @returns {Promise<*[]>}
+         */
         parseTableInPanel = (elementFindFunction, fieldSchema) => {
             let tmp = this.findElement(elementFindFunction);
             let dom = tmp.oDomRef?.querySelectorAll("table")[1];
             return this.parseTable(s => s.sId === dom.id, fieldSchema);
         }
 
+        /**
+         * Lightspeed에 의해 제어되는 표를 파싱하여 반환합니다.
+         *
+         * @param elementFindFunction
+         * @param fieldSchema
+         * @returns {Promise<*[]>}
+         */
         parseTable = async (elementFindFunction, fieldSchema) => {
             let schema = {};
             /**
