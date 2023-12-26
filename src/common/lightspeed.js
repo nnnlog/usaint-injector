@@ -79,6 +79,7 @@
          * @returns {Promise<void>}
          */
         waitForPageLoad = async () => {
+            if (UCF_LS._.lock > 1) return;
             return new Promise(r => {
                 let id = setInterval(() => {
                     if (UCF_LS._.lock >= 1) {
