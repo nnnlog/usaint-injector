@@ -9,9 +9,10 @@ if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
  * @param year
  * @param semesterKey
  * @param semesterValue
+ * @param rank
  * @returns {Promise<{subjects: {subject_name, subject_code, credit, grade_score, grade_symbol, professor}[], rank: {year, semester, semester_rank, total_rank}}>}
  */
-window.ssurade.crawl.getGradeBySemester = async (year, semesterKey, semesterValue) => {
+window.ssurade.crawl.getGradeBySemester = async (year, semesterKey, semesterValue, rank = true) => {
     let lightspeed = window.ssurade.lightspeed;
 
     await lightspeed.waitForPageLoad();
@@ -40,12 +41,14 @@ window.ssurade.crawl.getGradeBySemester = async (year, semesterKey, semesterValu
         grade_symbol: "등급",
         professor: "교수명"
     });
-    uploadData.rank = (await lightspeed.parseTable(s => s.sTitleText === "학기별 성적", {
-        year: "학년도",
-        semester: "학기",
-        semester_rank: "학기별석차",
-        total_rank: "전체석차"
-    })).find(a => a.year === year && a.semester === semesterValue);
+    if (rank) {
+        uploadData.rank = (await lightspeed.parseTable(s => s.sTitleText === "학기별 성적", {
+            year: "학년도",
+            semester: "학기",
+            semester_rank: "학기별석차",
+            total_rank: "전체석차"
+        })).find(a => a.year === year && a.semester === semesterValue);
+    }
 
     return uploadData;
 };
