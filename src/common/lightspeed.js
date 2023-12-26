@@ -108,6 +108,12 @@
          */
         findElementById = id => application.lightspeed.oControlFactory.oGetControlById(id);
 
+        findTableInPanel = (elementFindFunction) => {
+            let tmp = this.findElement(elementFindFunction);
+            let dom = tmp.oDomRef?.querySelectorAll("table")[1];
+            return this.findElement(s => s.sId === dom.id);
+        }
+
         /**
          * Lightspeed에 의해 제어되는 Input을 주어진 라벨명에 맞는 것을 찾아 반환합니다.
          *
@@ -137,38 +143,39 @@
          * @param fieldSchema
          * @returns {Promise<*[]>}
          */
-        parseTableInPanel = (elementFindFunction, fieldSchema) => {
-            let tmp = this.findElement(elementFindFunction);
-            let dom = tmp.oDomRef?.querySelectorAll("table")[1];
-            return this.parseTable(s => s.sId === dom.id, fieldSchema);
-        }
+        parseTableInPanel = (elementFindFunction, fieldSchema) => this.parseTable(this.findTableInPanel(elementFindFunction), fieldSchema);
+
+        /**
+         * Lightspeed에 의해 제어되는 표의 구성을 파싱하여 반환합니다.
+         *
+         * @param table
+         * @param fieldSchema
+         * @returns {{}}
+         */
+        parseTableSchema = (table, fieldSchema) => {
+            let schema = {};
+            let headers = table.aGetCellInfosOfRow(0);
+            for (let i = 0; i < headers.length; i++) {
+                let name = headers[i].oDomRefCell.innerText;
+                for (let k in fieldSchema) {
+                    if (fieldSchema[k] === name) {
+                        schema[k] = i;
+                    }
+                }
+            }
+
+            return schema;
+        };
 
         /**
          * Lightspeed에 의해 제어되는 표를 파싱하여 반환합니다.
          *
-         * @param elementFindFunction
+         * @param table
          * @param fieldSchema
-         * @returns {Promise<*[]>}
+         * @returns {Promise<*[]>}t
          */
-        parseTable = async (elementFindFunction, fieldSchema) => {
-            let schema = {};
-            /**
-             *
-             * @type {UCF_Control}
-             */
-            let table = this.findElement(elementFindFunction);
-
-            {
-                let headers = table.aGetCellInfosOfRow(0);
-                for (let i = 0; i < headers.length; i++) {
-                    let name = headers[i].oDomRefCell.innerText;
-                    for (let k in fieldSchema) {
-                        if (fieldSchema[k] === name) {
-                            schema[k] = i;
-                        }
-                    }
-                }
-            }
+        parseTable = async (table, fieldSchema) => {
+            let schema = parseTableSchema(table, fieldSchema);
 
             let data = [];
             let {iVisibleRowCount, iVisibleFirstRow} = table;

@@ -14,7 +14,7 @@ window.ssurade.crawl.getGradeSemesterList = async () => {
     await lightspeed.waitForPageLoad();
     await lightspeed.closePopup();
 
-    let ret = await lightspeed.parseTable(s => s.sTitleText === "학기별 성적", {
+    let ret = await lightspeed.parseTable(lightspeed.findElement(s => s.sTitleText === "학기별 성적"), {
         year: "학년도",
         semester: "학기",
         semester_rank: "학기별석차",

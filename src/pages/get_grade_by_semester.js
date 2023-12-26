@@ -33,7 +33,7 @@ window.ssurade.crawl.getGradeBySemester = async (year, semesterKey, semesterValu
     }
 
     let uploadData = {};
-    uploadData.subjects = await lightspeed.parseTable(s => s.sTitleText === "학기별 세부 성적", {
+    uploadData.subjects = await lightspeed.parseTable(lightspeed.findElement(s => s.sTitleText === "학기별 세부 성적"), {
         subject_name: "과목명",
         subject_code: "과목코드",
         credit: "과목학점",
@@ -42,7 +42,7 @@ window.ssurade.crawl.getGradeBySemester = async (year, semesterKey, semesterValu
         professor: "교수명"
     });
     if (rank) {
-        uploadData.rank = (await lightspeed.parseTable(s => s.sTitleText === "학기별 성적", {
+        uploadData.rank = (await lightspeed.parseTable(lightspeed.findElement(s => s.sTitleText === "학기별 성적"), {
             year: "학년도",
             semester: "학기",
             semester_rank: "학기별석차",
