@@ -37,11 +37,12 @@ window.ssurade.crawl.getGradeDetail = async (year, semesterKey, subjectCode) => 
         subject_code: "과목코드",
     });
 
-    for (let i = 1; i < table.iRowCount; i++) {
+    for (let i = 1; i <= table.iRowCount; i++) {
         if (table.getCell(i, schema.subject_code).oDomRef.innerText === subjectCode) {
             await lightspeed.closePopup();
 
             let btn = table.getCell(i, schema.detail).getContent();
+            if (btn === null) return null;
             btn.firePress(btn.sId);
             await lightspeed.waitForUnlock();
 

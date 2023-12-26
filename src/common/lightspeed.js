@@ -175,7 +175,7 @@
          * @returns {Promise<*[]>}t
          */
         parseTable = async (table, fieldSchema) => {
-            let schema = parseTableSchema(table, fieldSchema);
+            let schema = this.parseTableSchema(table, fieldSchema);
 
             let data = [];
             let {iVisibleRowCount, iVisibleFirstRow} = table;
