@@ -46,7 +46,8 @@ window.ssurade.crawl.getChapelInformation = async (year, semesterKey) => {
         lecturer: "강사",
         affiliation: "소속",
         lecture_name: "제목",
-        lecture_etc: "비고"
+        lecture_etc: "비고",
+        attendnace: "출결상태",
     });
 
     return uploadData;
