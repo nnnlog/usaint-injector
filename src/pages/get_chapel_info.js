@@ -29,6 +29,10 @@ window.ssurade.crawl.getChapelInformation = async (year, semesterKey) => {
         input.setValue(semesterKey);
         await lightspeed.waitForUnlock();
     }
+    {
+        await lightspeed.closePopup();
+        await lightspeed.clickButton("조회");
+    }
 
     let uploadData = {};
     uploadData.summary = (await lightspeed.parseTableInPanel(s => s.sTitle?.startsWith("좌석번호"), {
