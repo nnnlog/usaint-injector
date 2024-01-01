@@ -47,6 +47,10 @@
         return ret;
     };
 
+    let _log = UCF_Tracer.trace;
+    UCF_Tracer.trace = function (e) {
+        if (e === 0) _log(...arguments);
+    }
 
     class LightspeedWrapper {
         /**
