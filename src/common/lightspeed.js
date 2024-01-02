@@ -189,7 +189,7 @@
                     iVisibleFirstRow = i;
                     table.fireVerticalScroll(table.sId, i, "NONE", "", "SCROLLBAR", false, false, false, false);
                     await ssurade.lightspeed.waitForUnlock();
-                    table = this.findElement(elementFindFunction);
+                    table = this.findElementById(table.sId);
                 }
                 let infos = table.aGetCellInfosOfRow(i - iVisibleFirstRow + 1);
                 let curr = {};
