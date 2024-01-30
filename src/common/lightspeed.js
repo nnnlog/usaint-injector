@@ -118,7 +118,7 @@
 
         findTableInPanel = (elementFindFunction) => {
             let tmp = this.findElement(elementFindFunction);
-            let dom = tmp.oDomRef?.querySelectorAll("table")[1];
+            let dom = tmp.oDomRef?.querySelectorAll("table")[0];
             return this.findElement(s => s.sId === dom.id);
         }
 
