@@ -49,7 +49,10 @@
 
     let _log = UCF_Tracer.trace;
     UCF_Tracer.trace = function (e) {
-        if (e === 0) _log(...arguments);
+        if (e === 0) {
+            console.error(...arguments);
+            // _log(...arguments);
+        }
     }
 
     class LightspeedWrapper {
@@ -161,7 +164,7 @@
             let schema = {};
             let headers = table.aGetCellInfosOfRow(0);
             for (let i = 0; i < headers.length; i++) {
-                let name = headers[i].oDomRefCell.innerText;
+                let name = headers[i].oDomRefCell.innerText.trim();
                 for (let k in fieldSchema) {
                     if (fieldSchema[k] === name) {
                         schema[k] = i;
