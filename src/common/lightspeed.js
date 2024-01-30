@@ -118,8 +118,11 @@
 
         findTableInPanel = (elementFindFunction) => {
             let tmp = this.findElement(elementFindFunction);
-            let dom = tmp.oDomRef?.querySelectorAll("table")[0];
-            return this.findElement(s => s.sId === dom.id);
+            for (let dom of tmp.oDomRef?.querySelectorAll("table")) {
+                let element = this.findElement(s => s.sId === dom.id);
+                if (typeof element.aCellInfoMatrix !== "undefined") return element;
+            }
+            return null;
         }
 
         /**
