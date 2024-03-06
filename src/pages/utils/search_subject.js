@@ -8,7 +8,7 @@ if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
  *
  * @returns {Promise<void>}
  */
-window.ssurade.crawl.searchSubject = async (keyword) => {
+window.ssurade.crawl.searchSubject = async (year, semesterKey, keyword) => {
     let lightspeed = window.ssurade.lightspeed;
 
     await lightspeed.waitForPageLoad();

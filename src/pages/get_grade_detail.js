@@ -16,20 +16,7 @@ window.ssurade.crawl.getGradeDetail = async (year, semesterKey, subjectCode) => 
 
     await lightspeed.waitForPageLoad();
 
-    {
-        await lightspeed.closePopup();
-
-        let input = lightspeed.getInput("학년도");
-        input.setValue(year);
-        await lightspeed.waitForUnlock();
-    }
-    {
-        await lightspeed.closePopup();
-
-        let input = lightspeed.getInput("학기");
-        input.setValue(semesterKey);
-        await lightspeed.waitForUnlock();
-    }
+    await ssurade.crawl.selectYear(year, semesterKey);
 
     let table = lightspeed.findElement(s => s.sTitleText === "학기별 세부 성적");
     let schema = lightspeed.parseTableSchema(table, {

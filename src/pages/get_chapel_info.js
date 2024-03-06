@@ -15,20 +15,8 @@ window.ssurade.crawl.getChapelInformation = async (year, semesterKey) => {
 
     await lightspeed.waitForPageLoad();
 
-    {
-        await lightspeed.closePopup();
+    await ssurade.crawl.selectYear(year, semesterKey);
 
-        let input = lightspeed.getInput("학년도");
-        input.setValue(year);
-        await lightspeed.waitForUnlock();
-    }
-    {
-        await lightspeed.closePopup();
-
-        let input = lightspeed.getInput("학기");
-        input.setValue(semesterKey);
-        await lightspeed.waitForUnlock();
-    }
     {
         await lightspeed.closePopup();
         await lightspeed.clickButton("조회");

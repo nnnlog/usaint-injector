@@ -8,10 +8,14 @@ if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
  *
  * @returns {Promise<unknown>}
  */
-window.ssurade.crawl.getSubjectLists = async (keyword) => {
+window.ssurade.crawl.getSubjectLists = async (year, semesterKey, keyword) => {
     let lightspeed = window.ssurade.lightspeed;
 
-    await ssurade.crawl.searchSubject(keyword);
+    await lightspeed.waitForPageLoad();
+
+    await ssurade.crawl.selectYear(year, semesterKey);
+
+    await ssurade.crawl.searchSubject(year, semesterKey, keyword);
 
     return await lightspeed.parseTable(lightspeed.findElement(a => a.sClassName === "UCF_SapTable" && a.iColCount > 10), {
         isu_main_type: "이수구분(주전공)",

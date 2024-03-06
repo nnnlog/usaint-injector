@@ -8,8 +8,12 @@ if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
  *
  * @returns {Promise<unknown>}
  */
-window.ssurade.crawl.getSyllabusViewerURLs = async (codes) => {
+window.ssurade.crawl.getSyllabusViewerURLs = async (year, semesterKey, codes) => {
     let lightspeed = window.ssurade.lightspeed;
+
+    await lightspeed.waitForPageLoad();
+
+    await ssurade.crawl.selectYear(year, semesterKey);
 
     let S = new Set();
     for (let v of codes) S.add(v);
@@ -28,7 +32,7 @@ window.ssurade.crawl.getSyllabusViewerURLs = async (codes) => {
 
     let res = {};
     for (let k in keywords) {
-        await ssurade.crawl.searchSubject(k);
+        await ssurade.crawl.searchSubject(year, semesterKey, k);
 
         await lightspeed.parseTable(lightspeed.findElement(a => a.sClassName === "UCF_SapTable" && a.iColCount > 10), {
             syllabus: "계획",
@@ -44,7 +48,9 @@ window.ssurade.crawl.getSyllabusViewerURLs = async (codes) => {
                     return;
                 }
                 btn.firePress(btn.sId);
+                let p = ssurade.lightspeed.waitForUnlock();
                 await link.then(url => res[data.code] = url);
+                await p;
             },
         });
     }
