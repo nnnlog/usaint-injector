@@ -183,9 +183,10 @@
          *
          * @param table
          * @param fieldSchema
+         * @param handler
          * @returns {Promise<*[]>}t
          */
-        parseTable = async (table, fieldSchema) => {
+        parseTable = async (table, fieldSchema, handler = {}) => {
             let schema = this.parseTableSchema(table, fieldSchema);
 
             let data = [];
@@ -206,6 +207,13 @@
                         curr[k] = dom.querySelector("input")?.value ?? "";
                     }
                 }
+
+                for (let k in schema) {
+                    if (k in handler) {
+                        await handler[k](infos[schema[k]].oDomRefCell, curr);
+                    }
+                }
+
                 data.push(curr);
             }
 
