@@ -51,6 +51,8 @@ window.ssurade.crawl.getSyllabusViewerURLs = async (year, semesterKey, codes) =>
                 let p = ssurade.lightspeed.waitForUnlock();
                 await link.then(url => res[data.code] = url);
                 await p;
+
+                return undefined;
             },
         });
     }

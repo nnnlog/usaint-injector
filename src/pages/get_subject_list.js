@@ -18,6 +18,7 @@ window.ssurade.crawl.getSubjectLists = async (year, semesterKey, keyword) => {
     await ssurade.crawl.searchSubject(year, semesterKey, keyword);
 
     return await lightspeed.parseTable(lightspeed.findElement(a => a.sClassName === "UCF_SapTable" && a.iColCount > 10), {
+        syllabus: "계획",
         isu_main_type: "이수구분(주전공)",
         isu_multi_type: "이수구분(다전공)",
         abeek: "공학인증",
@@ -33,5 +34,10 @@ window.ssurade.crawl.getSubjectLists = async (year, semesterKey, keyword) => {
         lecture_time_place: "강의시간(강의실)",
         process: "과정",
         target: "수강대상",
+    }, {
+        syllabus: async (dom, data) => {
+            let btn = application.lightspeed.oGetControlByDomRef(dom.querySelector("div"));
+            return btn.firePress !== undefined;
+        },
     });
 };

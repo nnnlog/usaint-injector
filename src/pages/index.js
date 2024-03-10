@@ -10,3 +10,4 @@ import "./get_grade_detail";
 import "./get_scholarship_info";
 import "./get_subject_list";
 import "./get_syllabus_viewer_url";
+import "./get_other_major_subjects";

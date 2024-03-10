@@ -196,7 +196,9 @@
                     iVisibleFirstRow = i;
                     table.fireVerticalScroll(table.sId, i, "NONE", "", "SCROLLBAR", false, false, false, false);
                     await ssurade.lightspeed.waitForUnlock();
+
                     table = this.findElementById(table.sId);
+                    iVisibleFirstRow = table.iVisibleFirstRow;
                 }
                 let infos = table.aGetCellInfosOfRow(i - iVisibleFirstRow + 1);
                 let curr = {};
@@ -210,7 +212,7 @@
 
                 for (let k in schema) {
                     if (k in handler) {
-                        await handler[k](infos[schema[k]].oDomRefCell, curr);
+                        curr[k] = await handler[k](infos[schema[k]].oDomRefCell, curr);
                     }
                 }
 
