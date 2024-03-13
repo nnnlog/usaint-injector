@@ -12,7 +12,7 @@ if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
  * @param rank
  * @returns {Promise<{subjects: {subject_name, subject_code, credit, grade_score, grade_symbol, professor}[], rank: {year, semester, semester_rank, total_rank}}>}
  */
-window.ssurade.crawl.getGradeBySemesterOldVersion = async (year, semesterKey, semesterValue, rank = true) => {
+window.ssurade.crawl.getGradeBySemesterOldVersion = async (year, semesterKey) => {
     let lightspeed = window.ssurade.lightspeed;
 
     await lightspeed.waitForPageLoad();
