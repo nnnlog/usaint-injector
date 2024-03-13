@@ -8,9 +8,7 @@ if (window.ssurade.crawl === undefined) window.ssurade.crawl = {};
  *
  * @param year
  * @param semesterKey
- * @param semesterValue
- * @param rank
- * @returns {Promise<{subjects: {subject_name, subject_code, credit, grade_score, grade_symbol, professor}[], rank: {year, semester, semester_rank, total_rank}}>}
+ * @returns {Promise<{subjects: {subject_name, subject_code,professor}[]}>}
  */
 window.ssurade.crawl.getGradeBySemesterOldVersion = async (year, semesterKey) => {
     let lightspeed = window.ssurade.lightspeed;
