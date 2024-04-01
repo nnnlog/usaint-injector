@@ -47,6 +47,21 @@
         return ret;
     };
 
+    let _q_lock = application.lightspeed.oEventHandler.oWEQueue.setProcessingLock;
+    let _q_lock_promise = [];
+    application.lightspeed.oEventHandler.oWEQueue.setProcessingLock = function () {
+        let ret = _q_lock.call(this, ...arguments);
+
+        setTimeout(() => {
+            if (arguments[0] === false) {
+                for (let p of _q_lock_promise) p();
+                _q_lock_promise = [];
+            }
+        }, 0);
+
+        return ret;
+    };
+
     let _log = UCF_Tracer.trace;
     UCF_Tracer.trace = function (e) {
         if (e === 0) {
@@ -73,6 +88,18 @@
             p = new Promise(a => r = a);
             if (locked) {
                 _unlock_promise.push(r);
+            } else {
+                r();
+            }
+
+            return p;
+        };
+
+        waitForQueueUnlock = () => {
+            let p, r;
+            p = new Promise(a => r = a);
+            if (application.lightspeed.oEventHandler.oWEQueue.bProcessingLock) {
+                _q_lock_promise.push(r);
             } else {
                 r();
             }
@@ -194,13 +221,30 @@
             for (let i = 1; i <= table.iRowCount; i++) {
                 if (iVisibleFirstRow > i || i > iVisibleFirstRow + iVisibleRowCount - 1) {
                     iVisibleFirstRow = i;
-                    table.fireVerticalScroll(table.sId, i, "NONE", "", "SCROLLBAR", false, false, false, false);
-                    await ssurade.lightspeed.waitForUnlock();
+
+                    if (table.bHasFragments) {
+                        application.lightspeed.lock();
+                        table.setFirstVisibleRowIndex(i - 1);
+
+                        table.fireRequestData(table.sId, `${i},${i + iVisibleRowCount - 1};`, i, iVisibleRowCount);
+
+                        await ssurade.lightspeed.waitForUnlock();
+
+                        while (application.lightspeed.oEventHandler.oWEQueue.bProcessingLock) {
+                            await ssurade.lightspeed.waitForQueueUnlock();
+                        }
+
+                        iVisibleRowCount = table.iVisibleRowCount;
+                    } else {
+                        table.fireVerticalScroll(table.sId, i, "NONE", "", "SCROLLBAR", false, false, false, false);
+                        await ssurade.lightspeed.waitForUnlock();
+                    }
 
                     table = this.findElementById(table.sId);
                     iVisibleFirstRow = table.iVisibleFirstRow;
                 }
-                let infos = table.aGetCellInfosOfRow(i - iVisibleFirstRow + 1);
+
+                let infos = table.aGetCellInfosOfRow(table.bHasFragments ? i : i - iVisibleFirstRow + 1);
                 let curr = {};
                 for (let k in schema) {
                     let dom = infos[schema[k]].oDomRefCell;
