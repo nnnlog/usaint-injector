@@ -15,7 +15,9 @@ window.ssurade.crawl.getAbsentApplicationInformation = async (year, semesterKey)
 
     await lightspeed.waitForPageLoad();
 
-    await ssurade.crawl.selectYear(year, semesterKey);
+    if (year && semesterKey) {
+        await ssurade.crawl.selectYear(year, semesterKey);
+    }
 
     return await lightspeed.parseTableInPanel(s => s.sTitle === "결석신청정보", {
         absent_type: "결석구분상세",
