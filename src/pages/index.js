@@ -12,3 +12,4 @@ import "./get_subject_list";
 import "./get_syllabus_viewer_url";
 import "./get_other_major_subjects";
 import "./get_grade_by_semester_old_version";
+import "./get_absent_info"
