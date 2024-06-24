@@ -39,6 +39,14 @@ window.ssurade.crawl.getGradeDetail = async (year, semesterKey, subjectCode) => 
                 uploadData[detailTable.getCell(0, j).oDomRef.innerText] = detailTable.getCell(1, j).oDomRef.innerText;
             }
 
+            {
+                let label = ssurade.lightspeed.findElement(s => s.sText === "전달사항");
+                if (label !== undefined) {
+                    let input = ssurade.lightspeed.findElementById(label.sLabelFor);
+                    uploadData["전달사항"] = input.sValue;
+                }
+            }
+
             return uploadData;
         }
     }
