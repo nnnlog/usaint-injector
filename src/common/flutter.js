@@ -32,7 +32,7 @@
 
     let promises = [];
     promises.push(new Promise(r => {
-        if (window.flutter_inappwebview?._platformReady) r();
+        if (window.flutter_inappwebview?.callHandler) r();
         else window.addEventListener("flutterInAppWebViewPlatformReady", r);
     }));
 

@@ -27,6 +27,6 @@ window.ssurade.crawl.getAbsentApplicationInformation = async (year, semesterKey)
         application_date: "신청일",
         proceed_date: "처리일자",
         reject_cause: "거부사유",
-        status: "진행상태",
+        status: "학생서비스팀 승인 여부",
     });
 };
