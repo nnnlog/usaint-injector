@@ -25,6 +25,8 @@ window.ssurade.crawl.getSubjectLists = async (year, semesterKey, keyword) => {
         type: "교과영역",
         code: "과목번호",
         name: "과목명",
+        note: "수강유의사항",
+        type_information: "강좌유형정보",
         bunban: "분반",
         professor: "교수명",
         open_department: "개설학과",
