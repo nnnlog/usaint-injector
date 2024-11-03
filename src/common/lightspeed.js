@@ -17,7 +17,7 @@
     {
         let id;
         await new Promise(r => id = setInterval(() => {
-            if (window.application !== null && window.application.lightspeed) {
+            if (window.application && window.application.lightspeed) {
                 r();
                 clearInterval(id);
             }

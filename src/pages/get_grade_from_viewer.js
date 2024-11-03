@@ -23,12 +23,18 @@ window.ssurade.crawl.getGradeFromViewer = async () => {
         });
         if (!exportOption) return null;
 
-        document.querySelectorAll("select")[1].selectedIndex = 6;
-        document.querySelectorAll("select")[1].dispatchEvent(new Event('change'));
-        document.querySelectorAll("select")[1].closest("tr").querySelector("input").value = '|||||';
+        {
+          let selectElement = Array(...document.querySelectorAll("select")).find((e) => e.querySelectorAll("option").length === 7);
+          selectElement.selectedIndex = 6;
+          selectElement.dispatchEvent(new Event('change'));
+          selectElement.closest("tr").querySelector("input").value = '|||||';
+        }
 
-        document.querySelectorAll("select")[2].selectedIndex = 1;
-        document.querySelectorAll("select")[2].dispatchEvent(new Event('change'));
+        {
+          let selectElement = Array(...document.querySelectorAll("select")).find((e) => e.querySelectorAll("option").length === 2);
+          document.querySelectorAll("select")[2].selectedIndex = 1;
+          document.querySelectorAll("select")[2].dispatchEvent(new Event('change'));
+        }
     }
 
     let p = ssurade.domUtils.waitForDownload();
